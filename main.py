@@ -1,29 +1,32 @@
-#   Fonction pour calculer le 16ème chiffre de la carte bleue
-def luhn_key(card_number):
+def luhn_checksum(card_number):
+    def digits_of(n):
+        return [int(d) for d in str(n)]
     
-    reversed_digits = card_number[::-1]
+    digits = digits_of(card_number)
+    odd_digits = digits[-1::-2]
+    even_digits = digits[-2::-2]
+    
+    checksum = 0
+    checksum += sum(odd_digits)
+    
+    for d in even_digits:
+        checksum += sum(digits_of(d * 2))
+    
+    return checksum % 10
 
-    doubled_digits = [int(reversed_digits[i]) * 2 if i % 2 == 1 else int(reversed_digits[i]) for i in range(len(reversed_digits))]
-
-    subtracted_digits = [x - 9 if x > 9 else x for x in doubled_digits]
-
-    total = sum(subtracted_digits)
-
-    if total % 10 == 0:
-        key = 0
-    else:
-        key = 10 - (total % 10)
-
-    return key
+def get_luhn_key(card_number):
+    return (10 - luhn_checksum(card_number)) % 10
 
 state = False
-while state == False:
+while not state:
     cmd = input("> ")
     if "stop" in cmd:
         state = True
     else:
-        carte_partielle = cmd
-        if len(carte_partielle) == 15:
-            cle_luhn = luhn_key(carte_partielle)
-            print("Le 16ème chiffre de la carte est :" + str(cle_luhn))
-            #4520 5373 4310 550
+        cb_id = cmd
+        cb_idf = int(cb_id)
+        luhn_key = get_luhn_key(cb_idf)
+        if luhn_key == 0:
+            print('Clé de Luhn : ' + str(luhn_key) + ' (Valide)')
+        else:
+            print('Clé de Luhn : ' + str(luhn_key) + ' (Non valide)')
