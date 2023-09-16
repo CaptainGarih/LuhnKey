@@ -17,6 +17,13 @@ def luhn_checksum(card_number):
 def get_luhn_key(card_number):
     return (10 - luhn_checksum(card_number)) % 10
 
+def calculate_correct_luhn(card_number):
+    truncated_card_number = card_number // 10
+    
+    correct_luhn_key = get_luhn_key(truncated_card_number)
+    
+    return correct_luhn_key
+
 state = False
 while not state:
     cmd = input("> ")
@@ -30,3 +37,5 @@ while not state:
             print('Clé de Luhn : ' + str(luhn_key) + ' (Valide)')
         else:
             print('Clé de Luhn : ' + str(luhn_key) + ' (Non valide)')
+            correct_luhn = calculate_correct_luhn(cb_idf)
+            print('Clé de Luhn correcte : ' + str(correct_luhn))
