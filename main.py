@@ -25,5 +25,5 @@ while state == False:
         carte_partielle = cmd
         if len(carte_partielle) == 15:
             cle_luhn = luhn_key(carte_partielle)
-            print("Le 16ème chiffre de la carte est :" + cle_luhn)
+            print("Le 16ème chiffre de la carte est :" + str(cle_luhn))
             #4520 5373 4310 550
